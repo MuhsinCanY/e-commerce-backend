@@ -2,8 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Customer;
 import com.example.demo.entity.Role;
+import com.example.demo.exceptions.StoreException;
 import com.example.demo.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,6 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return customerRepository.findUserByEmail(username).orElseThrow(() -> new StoreException(
+                "User not found with given email: " + username, HttpStatus.BAD_REQUEST));
     }
 }
