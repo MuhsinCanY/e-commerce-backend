@@ -38,8 +38,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer findById(Long id) {
+        return customerRepository.findById(id).orElseThrow(()-> new StoreException("Customer not " +
+                "found with given ID",HttpStatus.BAD_REQUEST));
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return customerRepository.findUserByEmail(username).orElseThrow(() -> new StoreException(
                 "User not found with given email: " + username, HttpStatus.BAD_REQUEST));
     }
+
+
+
 }
